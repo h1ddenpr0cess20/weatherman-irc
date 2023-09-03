@@ -13,4 +13,4 @@ Fill in your OpenAI API key, WeatherAPI key, IRC server, username, and channel
 python3 weatherman.py
 ```
 
-To use, type **!w _location_**
+To use, type **!w _location_** or send a private message with location
