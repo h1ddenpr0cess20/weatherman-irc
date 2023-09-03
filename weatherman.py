@@ -72,19 +72,23 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
     
     # split message for irc length limit
     def chop(self, message):
-            lines = message.splitlines()    
-            for line in lines:
-                if len(line) > 420:
-                        newlines = textwrap.wrap(line, 
-                                                 width=420, 
-                                                 drop_whitespace=False, 
-                                                 replace_whitespace=False, 
-                                                 fix_sentence_endings=True, 
-                                                 break_long_words=False)
-                        return newlines
-                else: 
-                    return lines
-                
+        lines = message.splitlines()
+        newlines = []  # Initialize an empty list to store wrapped lines
+
+        for line in lines:
+            if len(line) > 420:
+                wrapped_lines = textwrap.wrap(line,
+                                            width=420,
+                                            drop_whitespace=False,
+                                            replace_whitespace=False,
+                                            fix_sentence_endings=True,
+                                            break_long_words=False)
+                newlines.extend(wrapped_lines)  # Extend the list with wrapped lines
+            else:
+                newlines.append(line)  # Add the original line to the list
+
+        return newlines  # Return the list of wrapped lines
+
 if __name__ == "__main__":
     #openai
     openai.api_key = "API_KEY"
