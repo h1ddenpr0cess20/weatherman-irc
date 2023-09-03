@@ -74,13 +74,16 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
     def chop(self, message):
             lines = message.splitlines()    
             for line in lines:
-                newlines = textwrap.wrap(line, 
-                                            width=420, 
-                                            drop_whitespace=False, 
-                                            replace_whitespace=False, 
-                                            fix_sentence_endings=True, 
-                                            break_long_words=False)
-                return newlines
+                if len(line) > 420:
+                        newlines = textwrap.wrap(line, 
+                                                 width=420, 
+                                                 drop_whitespace=False, 
+                                                 replace_whitespace=False, 
+                                                 fix_sentence_endings=True, 
+                                                 break_long_words=False)
+                        return newlines
+                else: 
+                    return lines
                 
 if __name__ == "__main__":
     #openai
