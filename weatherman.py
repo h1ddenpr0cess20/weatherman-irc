@@ -39,7 +39,8 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
         # get weather report
         if message.startswith("!w "):
             #get location from the message
-            location = message.strip("!w ")
+            location = message.strip("!w")
+            location = location.strip()
             #get weather report
             weather = self.get_weather(location)
             #generate the AI weather report
