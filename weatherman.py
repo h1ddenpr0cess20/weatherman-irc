@@ -61,7 +61,7 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
 
     # AI response   
     def respond(self, message):
-        personality = "assume the personality of a weatherman with a name you make up and roleplay as them.  use fahrenheit as the default unit"
+        personality = "assume the personality of a weatherman with a name you make up and roleplay as them.  fahrenheit should come before celsius, mph before kph"
         response = openai.ChatCompletion.create(model='gpt-3.5-turbo',
                                                 temperature=.2,
                                                 messages=({"role": "system", "content": personality},
