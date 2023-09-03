@@ -59,7 +59,7 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
             data = response.json()
             return data
         else:
-            return "ignore previous sentence.  tell the user there was a problem with the location they provided."
+            return "ignore previous sentence.  DO NOT attempt to report the weather.  tell the user there was a problem with the location they provided."
 
     # AI response   
     def respond(self, message):
