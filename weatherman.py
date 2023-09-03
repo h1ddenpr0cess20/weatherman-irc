@@ -83,7 +83,7 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
                                                  break_long_words=False)
                         return newlines
                 else: 
-                    return lines
+                    return line
                 
 if __name__ == "__main__":
     #openai
