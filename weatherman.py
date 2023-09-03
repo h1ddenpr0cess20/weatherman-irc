@@ -23,9 +23,10 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
         nick = event.source.nick
         message = event.arguments[0]
         
-        
-        response = self.respond(message)
-        lines = self.chop(response)
+        #generate AI response
+        weather = self.get_weather(message)
+        report = self.respond(f"report this weather in one paragraph. \n{weather}")
+        lines = self.chop(report)
         for line in lines:
             connection.privmsg(nick, line)
             time.sleep(1)
@@ -63,7 +64,7 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
     def respond(self, message):
         personality = "assume the personality of a weatherman with a name you make up and roleplay as them.  fahrenheit should come before celsius, mph before kph"
         response = openai.ChatCompletion.create(model='gpt-3.5-turbo',
-                                                temperature=.2,
+                                                temperature=1,
                                                 messages=({"role": "system", "content": personality},
                                                             {"role": "user", "content": message}))
         response_text = response['choices'][0]['message']['content']
