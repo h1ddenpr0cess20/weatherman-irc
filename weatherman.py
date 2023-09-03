@@ -23,12 +23,12 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
         nick = event.source.nick
         message = event.arguments[0]
         
-        #fix this later, gives a fake weather report instead of conversation
-        # response = self.respond(message)
-        # lines = self.chop(response)
-        # for line in lines:
-        #     connection.privmsg(nick, line)
-        #     time.sleep(1)
+        
+        response = self.respond(message)
+        lines = self.chop(response)
+        for line in lines:
+            connection.privmsg(nick, line)
+            time.sleep(1)
 
     def on_pubmsg(self, connection, event):
         # Handle messages in the channel
@@ -73,16 +73,13 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
     def chop(self, message):
             lines = message.splitlines()    
             for line in lines:
-                if len(line) > 420:
-                        newlines = textwrap.wrap(line, 
-                                                 width=420, 
-                                                 drop_whitespace=False, 
-                                                 replace_whitespace=False, 
-                                                 fix_sentence_endings=True, 
-                                                 break_long_words=False)
-                        return newlines
-                else: 
-                    return lines
+                newlines = textwrap.wrap(line, 
+                                            width=420, 
+                                            drop_whitespace=False, 
+                                            replace_whitespace=False, 
+                                            fix_sentence_endings=True, 
+                                            break_long_words=False)
+                return newlines
                 
 if __name__ == "__main__":
     #openai
