@@ -1,12 +1,12 @@
 # weatherman-irc
 
-An AI weatherman for IRC powered by OpenAI GPT-3.5-turbo and WeatherAPI
+An AI weatherman for IRC powered by OpenAI GPT-3.5-turbo and WeatherAPI.  Reports the current weather conditions in the style of a weather man at a news station.
 
 ## Setup
 ```
 pip3 install openai irc
 ```
-Fill in your OpenAI API key, WeatherAPI key, IRC server, username, and channel
+Fill in your [OpenAI API](https://platform.openai.com/signup) key, [WeatherAPI](https://www.weatherapi.com/my/) key, IRC server, username, and channel
 
 ## Use
 ```
