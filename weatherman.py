@@ -25,7 +25,8 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
         
         #generate AI response
         weather = self.get_weather(message)
-        report = self.respond(f"report this weather in one paragraph. \n{weather}")
+        #generates a longer report than in channel
+        report = self.respond(f"report this weather. \n{weather}")
         lines = self.chop(report)
         for line in lines:
             connection.privmsg(nick, line)
@@ -43,8 +44,8 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
             location = location.strip()
             #get weather report
             weather = self.get_weather(location)
-            #generate the AI weather report
-            report = self.respond(f"report this weather in one paragraph. \n{weather}")
+            #generate the AI weather report, omitting less important details
+            report = self.respond(f"report this weather in one paragraph, you can skip barometric pressure, visibility, UV index and other less important details. \n{weather}")
             lines = self.chop(report)
             #send lines to channel
             for line in lines:
