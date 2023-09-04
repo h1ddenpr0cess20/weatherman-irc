@@ -9,12 +9,18 @@ import textwrap
 import time
 
 class WeatherBot(irc.bot.SingleServerIRCBot):
-    def __init__(self, channel, nickname, server, port=6667):
+    def __init__(self, channel, nickname, server, password=None, port=6667):
         # Initialize the bot
         irc.bot.SingleServerIRCBot.__init__(self, [(server, port)], nickname, nickname)
         self.channel = channel
+        self.password = password
 
     def on_welcome(self, connection, event):
+        #if nick has a password
+        if self.password != None:
+          connection.privmsg("NickServ", f"IDENTIFY {self.password}")
+          #wait for identify to finish
+          time.sleep(5)
         # Join the channel when the bot is connected to the server
         connection.join(self.channel)
 
@@ -23,9 +29,9 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
         nick = event.source.nick
         message = event.arguments[0]
         
-        #generate AI response
+        #get the weather
         weather = self.get_weather(message)
-        #generates a longer report than in channel
+        #generate AI report, generates a longer report than in channel
         report = self.respond(f"report this weather. \n{weather}")
         lines = self.chop(report)
         for line in lines:
@@ -59,6 +65,8 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
         if response.status_code == 200:
             data = response.json()
             return data
+        
+        #improve this with other error codes later
         else:
             return "ignore previous sentence.  DO NOT attempt to report the weather.  tell the user there was a problem with the location they provided."
 
@@ -72,11 +80,13 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
         response_text = response['choices'][0]['message']['content']
         return response_text.strip()
     
-    # split message for irc length limit
+    # split message for irc message length limit of 512 characters
     def chop(self, message):
+        #separate each line of the response
         lines = message.splitlines()
         newlines = []  # Initialize an empty list to store wrapped lines
 
+        #check the length of the line, break it up if above limit
         for line in lines:
             if len(line) > 420:
                 wrapped_lines = textwrap.wrap(line,
@@ -101,6 +111,11 @@ if __name__ == "__main__":
     channel = "#CHANNEL"
     nickname = "NICKNAME"
     server = "irc.SERVER.TLD"
+    #optional password for channels that require registration
+    #password = "password"
 
-    bot = WeatherBot(channel, nickname, server)
+    try:
+        bot = WeatherBot(channel, nickname, server, password)
+    except:
+        bot = WeatherBot(channel, nickname, server)
     bot.start()
