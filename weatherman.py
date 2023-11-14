@@ -3,7 +3,7 @@
 #September 2023
 
 import irc.bot
-import openai
+from openai import OpenAI
 import requests
 import textwrap
 import time
@@ -73,11 +73,11 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
     # AI response   
     def respond(self, message):
         personality = "assume the personality of a weatherman with a name you make up and roleplay as them.  [fahrenheit should come before celsius, mph before kph]"
-        response = openai.ChatCompletion.create(model='gpt-3.5-turbo',
+        response = openai.chat.completions.create(model='gpt-3.5-turbo-1106',
                                                 temperature=1,
                                                 messages=({"role": "system", "content": personality},
                                                             {"role": "user", "content": message}))
-        response_text = response['choices'][0]['message']['content']
+        response_text = response.choices[0].message.content
         return response_text.strip()
     
     # split message for irc message length limit of 512 characters
@@ -103,7 +103,8 @@ class WeatherBot(irc.bot.SingleServerIRCBot):
 
 if __name__ == "__main__":
     #openai
-    openai.api_key = "API_KEY"
+    api_key = "API_KEY"
+    openai = OpenAI(api_key=api_key)
     #weather api
     weather_key = 'API_KEY'
     
